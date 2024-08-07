@@ -1,0 +1,226 @@
+CREATE TABLE Users
+(
+  user_id NUMBER NOT NULL,
+  user_name VARCHAR2(50) NOT NULL,
+ password VARCHAR2(20) NOT NULL,
+  gender VARCHAR2(10) NOT NULL,
+  email VARCHAR2(35) NOT NULL,
+  points NUMBER NOT NULL,
+  age NUMBER NOT NULL,
+  PRIMARY KEY (user_id)
+);
+
+CREATE TABLE Admins
+(
+  admin_id NUMBER NOT NULL,
+  admin_password VARCHAR2(20) NOT NULL,
+  admin_email VARCHAR2(30) NOT NULL,
+  PRIMARY KEY (admin_id)
+);
+
+CREATE TABLE Pets 
+( 
+  user_id NUMBER NOT NULL, 
+  pet_name VARCHAR2(30) NOT NULL, 
+  pet_type VARCHAR2(30) NOT NULL, 
+  time_since_fed TIMESTAMP NOT NULL, 
+  time_since_played TIMESTAMP NOT NULL, 
+  PRIMARY KEY (user_id), 
+  FOREIGN KEY (user_id) REFERENCES Users(user_id) 
+);
+
+CREATE TABLE Mood_Logs
+(
+  mood VARCHAR2(30) NOT NULL,
+  mood_id NUMBER NOT NULL,
+  day NUMBER NOT NULL,
+  month NUMBER NOT NULL,
+  year NUMBER NOT NULL,
+  user_id NUMBER NOT NULL,
+  PRIMARY KEY (mood_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Health_Disorders
+(
+  title VARCHAR2(30) NOT NULL,
+  description VARCHAR2(100) NOT NULL,
+  disorder_id NUMBER NOT NULL,
+  symptoms VARCHAR2(100) NOT NULL,
+  causes VARCHAR2(100) NOT NULL,
+  treatments VARCHAR2(100) NOT NULL,
+  admin_id NUMBER NOT NULL,
+  PRIMARY KEY (disorder_id),
+  FOREIGN KEY (admin_id) REFERENCES Admins(admin_id)
+);
+
+CREATE TABLE Friends
+(
+  user_id NUMBER NOT NULL,
+  friend_id NUMBER NOT NULL,  
+  PRIMARY KEY (user_id),
+  PRIMARY KEY (friend_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+  FOREIGN KEY (friend_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Messages
+(
+  message_id NUMBER NOT NULL,
+  content VARCHAR2(1000) NOT NULL,
+  timestamp TIMESTAMP NOT NULL,
+  message_status VARCHAR2(10) NOT NULL,
+  user_id NUMBER NOT NULL,
+  friend_id NUMBER NOT NULL,
+  PRIMARY KEY (message_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id),
+  FOREIGN KEY (friend_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Friend_Requests
+(
+  request_id NUMBER NOT NULL,
+  sender_id NUMBER NOT NULL,
+  receiver_id NUMBER NOT NULL,
+  request_status VARCHAR2(10) NOT NULL,
+  PRIMARY KEY (request_id),
+  FOREIGN KEY (sender_id) REFERENCES Users(user_id),
+  FOREIGN KEY (receiver_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Notes
+(
+  note_id NUMBER NOT NULL,
+  user_id NUMBER NOT NULL,
+  content VARCHAR2(1000) NOT NULL,
+  title VARCHAR2(20) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP,
+  PRIMARY KEY (note_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Daily_Tasks
+(
+  dailytask_id NUMBER NOT NULL,
+  user_id NUMBER NOT NULL,
+  task_title VARCHAR2(50) NOT NULL,
+  task_description VARCHAR2(100) NOT NULL,
+  task_points NUMBER NOT NULL,
+  is_completed VARCHAR2(6) NOT NULL,
+  PRIMARY KEY (dailytask_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Achievements
+(
+  achievement_id NUMBER NOT NULL,
+  achievement_title VARCHAR2(30) NOT NULL,
+  achievement_description VARCHAR2(100) NOT NULL,
+  achievement_points NUMBER NOT NULL,
+  PRIMARY KEY (achievement_id)
+);
+
+CREATE TABLE Achievements_Earned ( 
+    user_id NUMBER NOT NULL, 
+    achievement_id NUMBER NOT NULL, 
+    PRIMARY KEY (user_id, achievement_id), 
+    FOREIGN KEY (user_id) REFERENCES Users(user_id), 
+    FOREIGN KEY (achievement_id) REFERENCES Achievements(achievement_id) 
+)
+
+CREATE TABLE Feedback
+(
+  feedback_id NUMBER NOT NULL,
+  user_id NUMBER NOT NULL,
+  review VARCHAR2(200) NOT NULL,
+  feedback_date DATE NOT NULL,
+  rating NUMBER NOT NULL,
+  PRIMARY KEY (feedback_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Subscription_Details
+(
+  subscription_type_id NUMBER NOT NULL,
+  type_name VARCHAR2(30) NOT NULL,
+  price NUMBER NOT NULL,
+  features VARCHAR2(500) NOT NULL,
+  PRIMARY KEY (subscription_type_id)
+);
+
+CREATE TABLE Therapists
+(
+  therapist_id NUMBER NOT NULL,
+  therapist_name VARCHAR2(50) NOT NULL,
+  years_of_exp NUMBER NOT NULL,
+  email VARCHAR2(50) NOT NULL,
+  avg_rate NUMBER NOT NULL,
+  PRIMARY KEY (therapist_id)
+);
+
+CREATE TABLE Therapist_Availability ( 
+    therapist_id NUMBER NOT NULL, 
+    day_of_week VARCHAR2(50) NOT NULL, 
+    start_time VARCHAR2(20) NOT NULL, 
+    end_time VARCHAR2(20) NOT NULL, 
+    PRIMARY KEY (therapist_id), 
+    FOREIGN KEY (therapist_id) REFERENCES Therapists(therapist_id) 
+);
+
+CREATE TABLE Appointment ( 
+    appointment_id NUMBER NOT NULL, 
+    therapist_id NUMBER NOT NULL, 
+    session_date DATE NOT NULL, 
+    session_time TIMESTAMP NOT NULL, 
+    booking_status VARCHAR2(30) NOT NULL, 
+    PRIMARY KEY (appointment_id), 
+    FOREIGN KEY (therapist_id) REFERENCES Therapists(therapist_id) 
+);
+
+CREATE TABLE Subscriptions
+(
+  user_id NUMBER NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  subscription_type_id NUMBER NOT NULL,
+  PRIMARY KEY (user_id),
+  FOREIGN KEY (subscription_type_id) REFERENCES Subscription_Details(subscription_type_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Sessions
+(
+  session_id NUMBER NOT NULL,
+  user_id NUMBER NOT NULL,
+  therapist_id NUMBER NOT NULL,
+  duration NUMBER NOT NULL,
+  timestamp TIMESTAMP NOT NULL,
+  PRIMARY KEY (session_id),
+  FOREIGN KEY (therapist_id) REFERENCES Therapists(therapist_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Blog_Comments
+(
+  comment_id NUMBER NOT NULL,
+  user_id NUMBER NOT NULL,
+  blog_id NUMBER NOT NULL,
+  commentContent VARCHAR2(1000) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  PRIMARY KEY (comment_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id),
+  FOREIGN KEY (blog_id) REFERENCES Blogs(blog_id)
+);
+
+CREATE TABLE Blogs
+(
+  blog_id NUMBER NOT NULL,
+  blog_title VARCHAR2(30) NOT NULL,
+  blog_content VARCHAR2(2000) NOT NULL,
+  user_id NUMBER NOT NULL,
+  PRIMARY KEY (blog_id),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+

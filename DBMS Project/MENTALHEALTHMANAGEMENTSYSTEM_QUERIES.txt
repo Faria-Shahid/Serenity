@@ -1,0 +1,92 @@
+
+Query for finding out friends of a specific user:
+SELECT F.friend_id AS friend_user_id, U.user_name AS friend_name
+FROM Friends F
+JOIN Users U ON F.friend_id = U.user_id
+WHERE F.user_id = 2;
+
+To calculate number of friends of each user:
+SELECT user_id, COUNT(friend_id) AS num_friends
+FROM Friends
+GROUP BY user_id;
+
+To check all the requests send to a user:
+SELECT R.sender_id AS Requests_Received, U.user_name AS Requester_name
+FROM Friend_Requests R
+JOIN Users U ON R.sender_id = U.user_id
+WHERE R.receiver_id = 1;
+
+To check all the requests sent by a user:
+SELECT R.receiver_id AS Requests_Send_To, U.user_name AS Requested_name
+FROM Friend_Requests R
+JOIN Users U ON R.receiver_id = U.user_id
+WHERE R.sender_id = 1;
+
+To get the conversation between two particular users:
+SELECT m.message_id, m.content, m.timestamp, m.message_status, 
+       s.user_name AS sender_name, r.user_name AS receiver_name
+FROM Messages m
+JOIN Users s ON m.sender_id = s.user_id
+JOIN Users r ON m.receiver_id = r.user_id
+WHERE (m.sender_id = 1 AND m.receiver_id = 2)
+   OR (m.sender_id = 2 AND m.receiver_id = 1)
+ORDER BY m.timestamp;
+
+To search all the comments made by a particular user on a particular blog:
+SELECT u.user_name,b.blog_title,c.commentcontent
+FROM BlogComments c
+JOIN Users u ON c.user_id = u.user_id
+JOIN Blogs b ON c.blog_id = b.blog_id
+WHERE u.user_id = 1  
+AND b.blog_id = 1;
+
+To find top ten blogs according to most comments:
+SELECT b.blog_id, b.blog_title, COUNT(c.comment_id) AS comment_count
+FROM Blogs b
+LEFT JOIN BlogComments c ON b.blog_id = c.blog_id
+GROUP BY b.blog_id, b.blog_title
+ORDER BY comment_count DESC
+FETCH FIRST 10 ROWS ONLY;
+
+To find all the comments on a particular blog:
+SELECT u.user_name, c.commentcontent
+FROM BlogComments c
+JOIN Users u ON c.user_id = u.user_id
+WHERE c.blog_id = 1; 
+
+To get top ten most experienced therapists:
+SELECT *
+FROM Therapists
+ORDER BY years_of_exp DESC
+FETCH FIRST 10 ROWS ONLY;
+
+To find users whose subscription is about to expire:
+SELECT u.user_id, u.user_name, sd.type_name AS subscription_name
+FROM Users u
+JOIN Subscriptions s ON u.user_id = s.user_id
+JOIN Subscription_Details sd ON s.subscription_type_id = sd.subscription_type_id
+WHERE s.end_date <= ADD_MONTHS(SYSDATE, 1); 
+
+To find all users which have a subscription:
+SELECT u.user_id, u.user_name, u.gender, u.email, u.age, sd.type_name AS subscription_type
+FROM Users u
+JOIN Subscriptions s ON u.user_id = s.user_id
+JOIN Subscription_Details sd ON s.subscription_type_id = sd.subscription_type_id;
+
+To which admin has written the most sections on disorders:
+SELECT a.admin_id, a.admin_email,COUNT(h.disorder_id) AS disorder_count
+FROM Admins a
+JOIN Health_Disorders h ON a.admin_id = h.admin_id
+GROUP BY a.admin_id, a.admin_email
+ORDER BY disorder_count DESC
+FETCH FIRST 1 ROW ONLY;
+
+
+
+
+
+
+
+
+
+

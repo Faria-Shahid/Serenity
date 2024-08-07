@@ -1,0 +1,50 @@
+Create role basicUser;
+Create role premiumUser;
+Create role admin;
+
+GRANT SELECT ON Subscription_Details TO basicUser;
+GRANT SELECT ON Pets TO basicUser;
+GRANT SELECT ON Users TO basicUser;
+GRANT SELECT ON Health_Disorders TO basicUser;
+GRANT SELECT ON Daily_Tasks TO basicUser;
+GRANT SELECT ON Achievements TO basicUser;
+GRANT SELECT ON Achievements_Earned TO basicUser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Notes TO basicUser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Feedback TO basicUser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Blogs TO basicUser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON BlogComments TO basicUser;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Mood_Logs TO basicUser;
+GRANT SELECT, INSERT, DELETE ON Messages TO basicUser;
+GRANT SELECT, INSERT, DELETE ON Friend_Requests TO basicUser;
+GRANT SELECT, DELETE ON Friends TO basicUser;
+
+GRANT ALL PRIVILEGES ON Subscription_Details TO admin;
+GRANT ALL PRIVILEGES ON Pets TO admin;
+GRANT ALL PRIVILEGES ON Users TO admin;
+GRANT ALL PRIVILEGES ON Health_Disorders TO admin;
+GRANT ALL PRIVILEGES ON Daily_Tasks TO admin;
+GRANT ALL PRIVILEGES ON Achievements TO admin;
+GRANT ALL PRIVILEGES ON Achievements_Earned TO admin;
+GRANT ALL PRIVILEGES ON Notes TO admin;
+GRANT ALL PRIVILEGES ON Blogs TO admin;
+GRANT ALL PRIVILEGES ON BlogComments TO admin;
+GRANT ALL PRIVILEGES ON Mood_Logs TO admin;
+GRANT ALL PRIVILEGES ON Messages TO admin;
+GRANT ALL PRIVILEGES ON Friend_Requests TO admin;
+GRANT ALL PRIVILEGES ON Friends TO admin;
+GRANT ALL PRIVILEGES ON Subscriptions TO admin;
+GRANT ALL PRIVILEGES ON Therapists TO admin;
+GRANT ALL PRIVILEGES ON Therapist_Availability TO admin;
+GRANT ALL PRIVILEGES ON Appointment TO admin;
+GRANT ALL PRIVILEGES ON Sessions TO admin;
+GRANT ALL PRIVILEGES ON feedback TO admin;
+GRANT ALL PRIVILEGES ON Admins TO admin;
+
+GRANT basicUser TO premiumUser;
+GRANT SELECT ON Subscriptions TO premiumUser;
+GRANT SELECT ON Therapists TO premiumUser;
+GRANT SELECT ON Therapist_Availability TO premiumUser;
+GRANT SELECT ON Appointment TO premiumUser;
+GRANT SELECT ON Sessions TO premiumUser;
+
+
